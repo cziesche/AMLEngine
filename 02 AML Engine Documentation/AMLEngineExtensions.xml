@@ -826,15 +826,6 @@
     <member name="M:AMLEngineExtensions.BasicExtensions.GetFullClassName(CAEX_ClassModel.InterfaceClassType)">
       <summary> Returns the full class name of the given external interface. <param name="IC">internal element</param><returns>name of the referenced InterfaceClass with
             path information, or an empty string if not available</returns></summary>
-      <param name="IC">
-        <markup>
-          <include item="SMCMissingParamTag">
-            <parameter>param</parameter>
-            <parameter>IC</parameter>
-            <parameter>M:AMLEngineExtensions.BasicExtensions.GetFullClassName(CAEX_ClassModel.InterfaceClassType)</parameter>
-          </include>
-        </markup>
-      </param>
     </member>
     <member name="M:AMLEngineExtensions.BasicExtensions.GetFullClassName(CAEX_ClassModel.InternalElementType)">
       <summary>

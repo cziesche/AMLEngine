@@ -1959,7 +1959,9 @@
     </member>
     <member name="T:CAEX_ClassModel.CAEXDocument">
       <summary>
-            Class CAEXDocument 
+            Class CAEXDocument is the CAEX-Wrapper for a CAEX-XmlDocument. The CAEXDocument alway has a <see cref="!:CAEXDocument.CaexFile" /> Property, containing
+            the wrapped Root Node of the CAEX-XmlDocument. The CAEXDocument also provides access to CAEX-Element Dictionaries <see cref="P:CAEX_ClassModel.CAEXDocument.Tables" /> which
+            can be used for key-based fast access to CAEX-Elements. These Tables are also used for Document Validation.
             </summary>
     </member>
     <member name="M:CAEX_ClassModel.CAEXDocument.#ctor(CAEX_ClassModel.CAEX_ClassModel2)">
@@ -2104,7 +2106,17 @@
     </member>
     <member name="T:CAEX_ClassModel.CAEXFileType">
       <summary>
-            User extensions to the CAEXFileType class. New hierarchies are now added schema conform.
+               The CAEXFileType class is the CAEX-Wrapper around the CAEX-Element 'CAEXFile',
+               which is the Root-Element in any <see cref="T:CAEX_ClassModel.CAEXDocument" />. The CAEXFileType
+               provides Methods to insert and order children as it is required by the
+               CAEX-Schema. Until Version 2.1 of the AMLEngine, the CAEXFileType has an
+               associated set of HashTables for fast access. From version 3.0, these Tables
+               have been moved to the <see cref="T:CAEX_ClassModel.CAEXDocument" />. It is still possible to
+               access the tables from here, but the access is internally redirected to the
+               CAEXDocument. The CAEXFileType can be set to enable event handling <see cref="M:CAEX_ClassModel.CAEXFileType.EnableEventHandling(System.Boolean)" />. If this is set to true, CAEXObjects
+               can be registered
+               - as example <see cref="M:CAEX_ClassModel.CAEXFileType.RegisterCaexObjectsForNodeInsertedEvent(System.Xml.XmlNode,System.Boolean,System.Xml.XmlNodeChangedEventHandler)" />
+                 - to receive changed events when the XmlData has been modified.
             </summary>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.#ctor(System.Xml.XmlNode)">
@@ -2115,46 +2127,56 @@
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.AddObjToHashList(System.Boolean,CAEX_ClassModel.CAEXObject,System.Collections.Generic.Dictionary{System.String,CAEX_ClassModel.CAEXBasicObject},System.Boolean)">
       <summary>
-            This method adds a CAEX object to the hash list. If required, it performs validation
-            steps and can auto repair some errors.
+               This method adds a CAEX object to the hash list. If required, it performs
+               validation steps and can auto repair some errors.
             </summary>
-      <param name="withValidation">True if this method should perform validations. This is a little bit slower than without validation.</param>
-      <param name="obj">the CAEX object</param>
+      <param name="withValidation">    
+               True if this method should perform validations. This is a little bit slower
+               than without validation.
+            </param>
+      <param name="obj">               the CAEX object</param>
       <param name="iDAndNameErrorList">The i d and name error list.</param>
-      <param name="autoRepair">true if this method shall automatically repair ID and name related issues wherever possible.</param>
+      <param name="autoRepair">        
+               true if this method shall automatically repair ID and name related issues
+               wherever possible.
+            </param>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.AllElementsWithInternalLinks">
       <summary>
-            Getting all Elements with InternalLinks of the InstanceHierarchy and
-            SystemUnitClass elements in this CAEX file.
+               Getting an enumerable of all Elements with InternalLinks of all
+               InstanceHierarchies and SystemUnitClassLibraries in the CAEXFile. The
+               enumeration may return InternalElements or SystemUnitClass elements.
             </summary>
       <returns>An IEnumerable with SystemUnitClasses is returned.</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.AllInternalElementsWithInternalLinks">
       <summary>
-            Getting all InternalElements with InternalLinks of the InstanceHierarchy and
-            SystemUnitClass elements in this CAEX file.
+               Getting an enumerable of InternalElements with InternalLinks of all
+               InstanceHierarchies and SystemUnitClassLibraries in the CAEXFile.
             </summary>
       <returns>An IEnumerable with InternalElements is returned.</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.CAEXPath(CAEX_ClassModel.CAEXBasicObject)">
       <summary>
-            Returns the CAEX path of this object, search able with <see cref="M:CAEX_ClassModel.CAEXFileType.FindFastByPath(System.String)" /> 
-            methods. Examples: "plant/unit/tank" or GUID:interface. If the full hierarchical Path is
-            required, use the method HierarchyPath instead which delivers the full node path.
+               Returns the CAEX path of this object, search able with <see cref="M:CAEX_ClassModel.CAEXFileType.FindFastByPath(System.String)" /> methods. Examples: "plant/unit/tank" or
+               GUID:interface. If the full hierarchical Path is required, use the method
+               HierarchyPath instead which delivers the full node path.
             </summary>
       <param name="cObj">the CAEX object</param>
-      <returns>For classes, it returns the XML full Node Path. 
-            For Interface Instances, it returns GUID:InterfaceName.</returns>
+      <returns>
+               For classes, it returns the XML full Node Path. For Interface Instances, it
+               returns GUID:InterfaceName.
+            </returns>
     </member>
     <member name="P:CAEX_ClassModel.CAEXFileType.CaexSchemaLocation">
       <summary>
-            field for CAEX Schema reference
+               field for CAEX Schema reference
             </summary>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.EnableEventHandling(System.Boolean)">
       <summary>
-            The XMLDocument NodeInserted and NodeRemoved Events are caught by the CAEXFileType Object
+               The XMLDocument NodeInserted and NodeRemoved Events are caught by the
+               CAEXFileType Object
             </summary>
       <param name="enable">if true, the Events are caught, false otherwise</param>
     </member>
@@ -2165,7 +2187,7 @@
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.ExternalReferences">
       <summary>
-            Enumeration Method for all ExternalReferences of the CAEXFile.
+               Enumeration Method for all ExternalReferences of the CAEXFile.
             </summary>
       <returns>IEnumerable&lt;ExternalReferenceType&gt;.</returns>
     </member>
@@ -2176,50 +2198,55 @@
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.FindFastByID(System.String)">
       <summary>
-            Performs a document wide fast search and returns a CAEXObject given by its ID. This
-            method is fast due to table support. If the actual Tables don't contain any Object,
-            the <see cref="M:CAEX_ClassModel.Validation.CAEXTables.UpdateAllTables(System.Boolean)" /> method is called. If you have made
-            unregistered changes to the document, the update method should be called explicit to ensure,
-            that all Objects in the current Caex Document are registered.
+               Performs a document wide fast search and returns a CAEXObject given by its
+               ID. This method is fast due to table support. If the actual Tables don't
+               contain any Object, the <see cref="M:CAEX_ClassModel.Validation.CAEXTables.UpdateAllTables(System.Boolean)" /> method is
+               called. If you have made unregistered changes to the document, the update
+               method should be called explicit to ensure, that all Objects in the current
+               Caex Document are registered.
             </summary>
       <param name="ID">the ID ob the object which is subject of the search</param>
       <returns>the found CAEXObject or null if not found</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.FindFastByPath(System.String)">
       <summary>
-            Performs a document wide fast search and returns a CAEXObject given by its Path, e.g.
-            "plant/unit" or "GUID:Interface" If the actual Tables don't contain any Object,
-            the <see cref="M:CAEX_ClassModel.Validation.CAEXTables.UpdateAllTables(System.Boolean)" /> method is called. If you have made
-            unregistered changes to the document, the update method should be called explicit to ensure,
-            that all Objects in the current Caex Document are registered.
+               Performs a document wide fast search and returns a CAEXObject given by its
+               Path, e.g. "plant/unit" or "GUID:Interface" If the actual Tables don't
+               contain any Object, the <see cref="M:CAEX_ClassModel.Validation.CAEXTables.UpdateAllTables(System.Boolean)" /> method is
+               called. If you have made unregistered changes to the document, the update
+               method should be called explicit to ensure, that all Objects in the current
+               Caex Document are registered.
             </summary>
       <param name="Path">the path of the object which is subject of the search</param>
       <returns>the found CAEXObject or null if not found</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.GetAllAttributes(CAEX_ClassModel.IObjectWithAttributes)">
       <summary>
-            Retrieves all attributes and child attributes as a flat list.
+               Retrieves all attributes and child attributes as a flat list.
             </summary>
-      <param name="objWithAttributes">The parent object containing Attributes, e.g. an InternalElement.</param>
+      <param name="objWithAttributes">
+               The parent object containing Attributes, e.g. an InternalElement.
+            </param>
       <returns>A list of Attributes.</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.GetAllElementsWithInternalLinks">
       <summary>
-            Getting all Elements with InternalLinks of the InstanceHierarchy and
-            SystemUnitClass elements in this CAEX file.
+               Getting a List of all Elements with InternalLinks of all
+               InstanceHierarchies and SystemUnitClassLibraries in the CAEXFile. The List
+               may contain InternalElements and SystemUnitClass elements.
             </summary>
       <returns>A List with InternalElements is returned.</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.GetAllInternalElementsWithInternalLinks">
       <summary>
-            Getting all InternalElements with InternalLinks of the InstanceHierarchy and
-            SystemUnitClass elements in this CAEX file.
+               Getting a List of all InternalElements with InternalLinks of all
+               InstanceHierarchies and SystemUnitClassLibraries in the CAEXFile.
             </summary>
       <returns>A List with InternalElements is returned.</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.GetParent(CAEX_ClassModel.CAEXBasicObject)">
       <summary>
-            This method returns the parent CAEXBasicObject of the current CAEXBasicObject.
+               This method returns the parent CAEXBasicObject of the current CAEXBasicObject.
             </summary>
       <param name="obj">the CAEX Basic Object</param>
       <returns>the parent CAEXBasicObject</returns>
@@ -2227,107 +2254,120 @@
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.getSchemaLocation">
       <summary>
-            Get the CAEX Schema location of this xml document
+               Get the CAEX Schema location of this xml document
             </summary>
       <returns>The CAEX Schema location name</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.HierarchyPath(CAEX_ClassModel.CAEXBasicObject)">
       <summary>
-            Returns the hierarchical full node path of this object, e. g. "plant/unit/tank" or
-            "plant/unit/tank/interface" or "plant/unit/tank/attribute". If the CAEXPath is required,
-            use the method Path which delivers e.g. GUID:interface.
+               Returns the hierarchical full node path of this object, e. g.
+               "plant/unit/tank" or "plant/unit/tank/interface" or
+               "plant/unit/tank/attribute". If the CAEXPath is required, use the method
+               Path which delivers e.g. GUID:interface.
             </summary>
       <param name="cObj">this</param>
-      <returns>Returns the XML full Node Path. If the CAEXPath is required, use the method Path which
-            delivers e.g. GUID:interface</returns>
+      <returns>
+               Returns the XML full Node Path. If the CAEXPath is required, use the method
+               Path which delivers e.g. GUID:interface
+            </returns>
     </member>
     <member name="P:CAEX_ClassModel.CAEXFileType.IDHashList">
       <summary>
-            A list of all CAEX object instances in the whole CAEX-Document which have an ID,
-            providing the pair "ID" and "CAEXObject". This is the basis for the fast search methods
-            <see cref="M:CAEX_ClassModel.CAEXFileType.FindFastByID(System.String)" />. The update of this list is done calling the method
-            <see cref="M:CAEX_ClassModel.CAEXFileType.UpdateCAEXObjectHashListsFastWithoutValidation" /> this is not done automatically!
-            <remarks> This IDHashList is not used for fast search methods anymore. The Fast Search
-            is based on the new <see cref="P:CAEX_ClassModel.Validation.CAEXTables.IDTable" /> which contains the XMLElements and
-            not the CAEXWrappers around the XmlElements. It is still possible to use this Property,
-            it will be rebuild from the IDTable but creates additional overhead to build and store
-            the CAEXWrappers around the XmlElements. </remarks></summary>
+               A list of all CAEX object instances in the whole CAEX-Document which have
+               an ID, providing the pair "ID" and "CAEXObject". This was the basis for the
+               fast search methods <see cref="M:CAEX_ClassModel.CAEXFileType.FindFastByID(System.String)" /> until Version 2.1 of the
+               AMLEngine. The update of this list is done calling the method <see cref="M:CAEX_ClassModel.CAEXFileType.UpdateCAEXObjectHashListsFastWithoutValidation" /> this is not done
+               automatically! <remarks>This IDHashList is not used for fast search methods
+               anymore. The Fast Search is based on the new <see cref="P:CAEX_ClassModel.Validation.CAEXTables.IDTable" /> which contains the XMLElements and not the
+               CAEXWrappers around the XmlElements. It is still possible to use this
+               Property, it will be rebuild from the IDTable but creates additional
+               overhead to build and store the CAEXWrappers around the XmlElements.</remarks></summary>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.Import_ExternalReference(CAEX_ClassModel.ExternalReferenceType)">
       <summary>
-            Importing an ExternalReference from another document context. If another externalReference
-            with the same path and the same alias Attribute exists, nothing is imported.
+               Importing an ExternalReference from another document context. If another
+               externalReference with the same path and the same alias Attribute exists,
+               nothing is imported.
             </summary>
-      <param name="externalReference">The externalReference to import to this document</param>
+      <param name="externalReference">
+               The externalReference to import to this document
+            </param>
       <returns>New ExternalReferenceType, inserted in the CAEXFile.</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.Import_InstanceHierarchy(CAEX_ClassModel.InstanceHierarchyType)">
       <summary>
-            Importing an InstanceHierarchy from another document context. Unlike <see cref="M:CAEX_ClassModel.CAEXFileType.Insert_InstanceHierarchy(CAEX_ClassModel.InstanceHierarchyType)" />
-            InstanceHierarchy's that are coming from other files can be inserted.
+               Importing an InstanceHierarchy from another document context. Unlike <see cref="M:CAEX_ClassModel.CAEXFileType.Insert_InstanceHierarchy(CAEX_ClassModel.InstanceHierarchyType)" /> InstanceHierarchy's that are coming from
+               other files can be inserted.
             </summary>
-      <param name="instanceHierarchy">The InstanceHierarchy to import to this document</param>
+      <param name="instanceHierarchy">
+               The InstanceHierarchy to import to this document
+            </param>
       <returns>New InstanceHierarchyType, inserted in the CAEXFile.</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.Import_InterfaceClassLibHierarchy(CAEX_ClassModel.InterfaceClassLibType)">
       <summary>
-            Importing a InterfaceClassLibHierarchy from another document context. Unlike 
-            <see cref="M:CAEX_ClassModel.CAEXFileType.Insert_InterfaceClassLibHierarchy(CAEX_ClassModel.InterfaceClassLibType)" /> InterfaceClassLibHierarchy's that are coming from
-            other files can be inserted.
+               Importing an InterfaceClassLibHierarchy from another document context.
+               Unlike <see cref="M:CAEX_ClassModel.CAEXFileType.Insert_InterfaceClassLibHierarchy(CAEX_ClassModel.InterfaceClassLibType)" />
+               InterfaceClassLibHierarchy's that are coming from other files can be inserted.
             </summary>
-      <param name="interfaceClassLib">The InterfaceClassLibHierarchy to import to this document</param>
+      <param name="interfaceClassLib">
+               The InterfaceClassLibHierarchy to import to this document
+            </param>
       <returns>New InterfaceClassLibType, inserted in the CAEXFile.</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.Import_RoleClassLibHierarchy(CAEX_ClassModel.RoleClassLibType)">
       <summary>
-            Importing a RoleClassLib from another document context. Unlike method
-            Insert_RoleClassLibHierarchy(..) RoleClassLibs that are coming from other files can be inserted.
+               Importing a RoleClassLib from another document context. Unlike method
+               Insert_RoleClassLibHierarchy(..) RoleClassLibs that are coming from other
+               files can be inserted.
             </summary>
       <param name="roleClassLib">The RoleClassLib to import to this document</param>
       <returns>New RoleClass Lib, inserted in the CAEXFile</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.Import_SystemUnitClassLibHierarchy(CAEX_ClassModel.SystemUnitClassLibType)">
       <summary>
-            Importing a SystemUnitClassLib from another document context. Unlike method
-            Insert_SystemUnitClassLibHierarchy(..) SystemUnitClassLibs that are coming from other
-            files can be inserted.
+               Importing a SystemUnitClassLib from another document context. Unlike method
+               Insert_SystemUnitClassLibHierarchy(..) SystemUnitClassLibs that are coming
+               from other files can be inserted.
             </summary>
-      <param name="systemUnitClassLib">The SystemUnitClassLib to import to this document</param>
+      <param name="systemUnitClassLib">
+               The SystemUnitClassLib to import to this document
+            </param>
       <returns>New SystemUnitClassLib, inserted in the CAEXFile.</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.Insert_ExternalReference(CAEX_ClassModel.ExternalReferenceType)">
       <summary>
-            Inserts the external reference.
+               Inserts the external reference.
             </summary>
       <param name="externalReference">The external reference.</param>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.Insert_InstanceHierarchy(CAEX_ClassModel.InstanceHierarchyType)">
       <summary>
-            Insert an existing InstanceHierarchy to this aml file as the Last InstanceHierarchy 
+               Insert an existing InstanceHierarchy to this aml file as the Last InstanceHierarchy
             </summary>
       <param name="instanceHierarchyNode">The Instance Hierarchy to insert</param>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.Insert_InterfaceClassLibHierarchy(CAEX_ClassModel.InterfaceClassLibType)">
       <summary>
-            Insert an existing InterfaceClassLib to this aml file as the Last InterfaceClassLib 
+               Insert an existing InterfaceClassLib to this aml file as the Last InterfaceClassLib
             </summary>
       <param name="interfaceClassLibNode">The interface class lib to insert</param>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.Insert_RoleClassLibHierarchy(CAEX_ClassModel.RoleClassLibType)">
       <summary>
-            Insert a RoleClassLib to this aml file as the Last RoleClassLib. 
+               Insert a RoleClassLib to this aml file as the Last RoleClassLib.
             </summary>
       <param name="roleClassLib">The role class library to insert</param>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.Insert_SystemUnitClassLibHierarchy(CAEX_ClassModel.SystemUnitClassLibType)">
       <summary>
-            Append a SystemUnitClassLib to this aml file as the Last SystemUnitClassLib 
+               Append a SystemUnitClassLib to this aml file as the Last SystemUnitClassLib
             </summary>
       <param name="systemUnitClassLib">The system unit class library to insert.</param>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.InstanceHierarchies">
       <summary>
-            Enumeration Method for all InstanceHierarchies of the CAEXFile.
+               Enumeration Method for all InstanceHierarchies of the CAEXFile.
             </summary>
       <returns>IEnumerable&lt;InstanceHierarchyType&gt;.</returns>
     </member>
@@ -2343,135 +2383,141 @@
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.InterfaceClassLibraries">
       <summary>
-            Enumeration Method for all InterfaceClass Libraries of the CAEXFile.
+               Enumeration Method for all InterfaceClass Libraries of the CAEXFile.
             </summary>
       <returns>IEnumerable&lt;InterfaceClassLibType&gt;.</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.IterateInternalElementsForLinks(CAEX_ClassModel.InternalElementType,System.Collections.Generic.List{CAEX_ClassModel.InternalElementType})">
       <summary>
-            Iterating through all InternalElements starting with the given InternalElement and
-            collecting all InternalLinks
+               Iterating through all InternalElements starting with the given
+               InternalElement and collecting all InternalLinks
             </summary>
-      <param name="internalElement">The InternalElement to check for InternalLinks</param>
-      <param name="internalElementsList">The list that contains a list of InternalLinks for each InternalElement</param>
+      <param name="internalElement">     The InternalElement to check for InternalLinks</param>
+      <param name="internalElementsList">
+               The list that contains a list of InternalLinks for each InternalElement
+            </param>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.New_ExternalReferenceHierarchy(System.String,System.String)">
       <summary>
-            A new ExternalReference node is added to the CAEX file.
+               A new ExternalReference node is added to the CAEX file.
             </summary>
-      <param name="path">The path value of this external reference</param>
+      <param name="path"> The path value of this external reference</param>
       <param name="alias">The alias value of this external reference</param>
       <returns>A new ExternalReference</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.New_InstanceHierarchy(System.String)">
       <summary>
-            Adding a new InstanceHierarchy to this CAEX file. The name attribute is set to "New InstanceHierarchy";
-            The Instance Hierarchy is always added as the last Instance Hierarchy.
+               Adding a new InstanceHierarchy to this CAEX file. The name attribute is set
+               to "New InstanceHierarchy"; The Instance Hierarchy is always added as the
+               last Instance Hierarchy.
             </summary>
       <param name="name">The name of the new InstanceHierarchy</param>
       <returns>A new InstanceHierarchy node</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.New_InterfaceClassLibHierarchy(System.String)">
       <summary>
-            Adding a new InterfaceClassLib hierarchy node to this CAEX file.
+               Adding a new InterfaceClassLib hierarchy node to this CAEX file.
             </summary>
       <param name="name">The name of the new InterfaceClassLibHierarchy</param>
       <returns>A new InterfaceClassLib node</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.New_RoleClassLibHierarchy(System.String)">
       <summary>
-            Adding a new RoleClassLib to this CAEX file.
+               Adding a new RoleClassLib to this CAEX file.
             </summary>
       <param name="name">The name of the RoleClassLib.</param>
       <returns>A new RoleClassLib node</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.New_SystemUnitClassLibHierarchy(System.String)">
       <summary>
-            Adding a new SystemUnitClassLib Hierarchy to this CAEX file.
+               Adding a new SystemUnitClassLib Hierarchy to this CAEX file.
             </summary>
       <param name="name">The name of the new SystemUnitClassLibrary</param>
       <returns>The new SystemUnitClassLibrary</returns>
     </member>
     <member name="P:CAEX_ClassModel.CAEXFileType.NumberOfAllObjects">
       <summary>
-            number of all checked objects
+               number of all checked objects
             </summary>
     </member>
     <member name="P:CAEX_ClassModel.CAEXFileType.NumberOfAttributes">
       <summary>
-            number of checked Attributes
+               number of checked Attributes
             </summary>
     </member>
     <member name="P:CAEX_ClassModel.CAEXFileType.NumberOfInterfaceClasses">
       <summary>
-            number of checked InterfaceClasses
+               number of checked InterfaceClasses
             </summary>
     </member>
     <member name="P:CAEX_ClassModel.CAEXFileType.NumberOfInterfaceInstances">
       <summary>
-            Gets the number of interface instances.
+               Gets the number of interface instances.
             </summary>
     </member>
     <member name="P:CAEX_ClassModel.CAEXFileType.NumberOfInternalElements">
       <summary>
-            number of InternalElements
+               number of InternalElements
             </summary>
     </member>
     <member name="P:CAEX_ClassModel.CAEXFileType.NumberOfLinks">
       <summary>
-            number of checked Links
+               number of checked Links
             </summary>
     </member>
     <member name="P:CAEX_ClassModel.CAEXFileType.NumberOfRoleClasses">
       <summary>
-            number of checked RoleClasses
+               number of checked RoleClasses
             </summary>
     </member>
     <member name="P:CAEX_ClassModel.CAEXFileType.NumberOfSystemUnitClasses">
       <summary>
-            number of checked SystemUnitClasses
+               number of checked SystemUnitClasses
             </summary>
     </member>
     <member name="P:CAEX_ClassModel.CAEXFileType.PathHashList">
       <summary>
-            A list of all CAEX object classes in the whole document, providing the pair "Path" and
-            <see cref="T:CAEX_ClassModel.CAEXObject" />.  This is the basis for the fast search methods
-            <see cref="M:CAEX_ClassModel.CAEXFileType.FindFastByPath(System.String)" />. The update of this list is done calling the method
-            <see cref="M:CAEX_ClassModel.CAEXFileType.UpdateCAEXObjectHashListsFastWithoutValidation" /> this is not done automatically!
-            <remarks> This PathHashList is not used for fast search methods anymore. The Fast Search
-            is based on the new <see cref="P:CAEX_ClassModel.Validation.CAEXTables.PathTable" /> which contains the XMLElements and
-            not the CAEXWrappers around the XmlElements. It is still possible to use this Property,
-            it will be rebuild from the PathTable but creates additional overhead to build and store
-            the CAEXWrappers around the XmlElements. </remarks><value>The path hash list.</value></summary>
+               A list of all CAEX object classes in the whole document, providing the pair
+               "Path" and <see cref="T:CAEX_ClassModel.CAEXObject" />. This was the basis for the fast search
+               methods <see cref="M:CAEX_ClassModel.CAEXFileType.FindFastByPath(System.String)" /> until Version 2.1 of the AMLEngine.
+               The update of this list is done calling the method <see cref="M:CAEX_ClassModel.CAEXFileType.UpdateCAEXObjectHashListsFastWithoutValidation" /> this is not done
+               automatically! <remarks>This PathHashList is not used for fast search
+               methods anymore. The Fast Search is based on the new <see cref="P:CAEX_ClassModel.Validation.CAEXTables.PathTable" /> which contains the XMLElements and not the
+               CAEXWrappers around the XmlElements. It is still possible to use this
+               Property, it will be rebuild from the PathTable but creates additional
+               overhead to build and store the CAEXWrappers around the
+               XmlElements.</remarks><value>The path hash list.</value></summary>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.PreorderTraversal(System.Collections.IEnumerator,System.Func{System.Object,System.Collections.IEnumerator})">
       <summary>
-            Preorders the traversal.
+               Traversal method for a hierarchical tree, with identical childSelector for
+               all tree nodes. The method uses a preorder algorithm without recursion for
+               the deep traversal of the complete tree.
             </summary>
-      <param name="source">The source.</param>
+      <param name="source">       The source.</param>
       <param name="childSelector">The child selector.</param>
       <returns>IEnumerable.</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.RegisterCaexObjectsForNodeInsertedEvent(System.Xml.XmlNode,System.Boolean,System.Xml.XmlNodeChangedEventHandler)">
       <summary>
-            Register an XMLNode Object for a NodeInserted Event in the CAEXFileTypes XMLDocument
+               Register an XMLNode Object for a NodeInserted Event in the CAEXFileTypes XMLDocument
             </summary>
-      <param name="node">the xmlNode of any CAEX-Object</param>
-      <param name="add">true: add the handler; false: remove the handler</param>
+      <param name="node">   the xmlNode of any CAEX-Object</param>
+      <param name="add">    true: add the handler; false: remove the handler</param>
       <param name="handler">the Handler</param>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.RegisterCaexObjectsForNodeRemovedEvent(System.Xml.XmlNode,System.Boolean,System.Xml.XmlNodeChangedEventHandler)">
       <summary>
-            Register an XMLNode Object for a NodeRemoved Event in the CAEXFileTypes XMLDocument
+               Register an XMLNode Object for a NodeRemoved Event in the CAEXFileTypes XMLDocument
             </summary>
-      <param name="node">the xmlNode of any CAEX-Object</param>
-      <param name="add">true: add the handler; false: remove the handler</param>
+      <param name="node">   the xmlNode of any CAEX-Object</param>
+      <param name="add">    true: add the handler; false: remove the handler</param>
       <param name="handler">the Handler</param>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.ReplaceObjectInHashList(CAEX_ClassModel.CAEXObject)">
       <summary>
-            Replace the object in the hash-list, necessary if the object has got a new CAEXWrapper.
-            <para>author: Josef Prinz</para></summary>
+               Replace the object in the hash-list, necessary if the object has got a new CAEXWrapper.
+               <para>author: Josef Prinz</para></summary>
       <param name="obj">The object.</param>
     </member>
     <member name="F:CAEX_ClassModel.CAEXFileType.RoleClassLib">
@@ -2481,7 +2527,7 @@
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.RoleClassLibraries">
       <summary>
-            Enumeration Method for all RoleClass Libraries of the CAEXFile.
+               Enumeration Method for all RoleClass Libraries of the CAEXFile.
             </summary>
       <returns>IEnumerable&lt;RoleClassLibType&gt;.</returns>
     </member>
@@ -2492,7 +2538,7 @@
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.setSchemaLocation(System.String)">
       <summary>
-            Sets the schema location in the CAEX File.
+               Sets the schema location in the CAEX File.
             </summary>
       <param name="schemaLocation">The schema location.</param>
     </member>
@@ -2508,24 +2554,31 @@
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.SystemUnitClassLibraries">
       <summary>
-            Enumeration Method for all SystemUnitClass Libraries of the CAEXFile.
+               Enumeration Method for all SystemUnitClass Libraries of the CAEXFile.
             </summary>
       <returns>IEnumerable&lt;SystemUnitClassLibType&gt;.</returns>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.UpdateCAEXObjectHashListsFastWithoutValidation">
       <summary>
-            Updates the Hash Lists of all CAEXObjects. This Methods has a new Implementation in
-            Version 3.0 and calls the <see cref="M:CAEX_ClassModel.Validation.CAEXTables.UpdateAllTables(System.Boolean)" /> Method, which uses
-            additional Tables. The <see cref="P:CAEX_ClassModel.CAEXFileType.IDHashList" /> and <see cref="P:CAEX_ClassModel.CAEXFileType.PathHashList" /> are not
-            used any more, but are still provided for downward compatibility.
+               Updates the Hash Lists of all CAEXObjects. This Methods has a new
+               Implementation in Version 3.0 and calls the <see cref="M:CAEX_ClassModel.Validation.CAEXTables.UpdateAllTables(System.Boolean)" /> Method, which uses additional Tables.
+               The <see cref="P:CAEX_ClassModel.CAEXFileType.IDHashList" /> and <see cref="P:CAEX_ClassModel.CAEXFileType.PathHashList" /> are not used
+               any more, but are still provided for downward compatibility.
             </summary>
     </member>
     <member name="M:CAEX_ClassModel.CAEXFileType.UpdateCAEXObjectHashListsWithValidation(System.Collections.Generic.Dictionary{System.String,CAEX_ClassModel.CAEXBasicObject}@,System.Boolean)">
       <summary>
-            regular expression which allows searching a string for forbidden characters
+               Updates the Hash Lists of all CAEXObjects and checks the consistency of the
+               CAEXObjects. This Methods has a new Implementation in Version 3.0 and calls
+               the <see cref="M:CAEX_ClassModel.Validation.CAEXTables.UpdateAllTables(System.Boolean)" /> Method, which uses additional
+               Tables. The <see cref="P:CAEX_ClassModel.CAEXFileType.IDHashList" /> and <see cref="P:CAEX_ClassModel.CAEXFileType.PathHashList" /> are not
+               used any more, but are still provided for downward compatibility.
             </summary>
       <param name="iDAndNameErrorList">string list with error comments</param>
-      <param name="autoRepair">true if this method shall automatically repair ID and name related issues wherever possible.</param>
+      <param name="autoRepair">        
+               true if this method shall automatically repair ID and name related issues
+               wherever possible.
+            </param>
       <returns>number of errors</returns>
     </member>
     <member name="T:CAEX_ClassModel.CAEXFileType.MemberAttribute_FileName">
@@ -7441,15 +7494,6 @@
             </summary>
       <param name="newInstanceObject">The instance of a class to be inserted at this object. The instance can be of type
             <param name="asFirst">if <c>true</c>, inserted as first (default), otherwise at last</param><see cref="T:CAEX_ClassModel.InternalElementType" />, <see cref="T:CAEX_ClassModel.InterfaceClassType" /></param>
-      <param name="asFirst">
-        <markup>
-          <include item="SMCMissingParamTag">
-            <parameter>param</parameter>
-            <parameter>asFirst</parameter>
-            <parameter>M:CAEX_ClassModel.SystemUnitClassType.Insert_NewInstance(Altova.Xml.TypeBase,System.Boolean)</parameter>
-          </include>
-        </markup>
-      </param>
       <returns>True if insertion was successful, else false.</returns>
     </member>
     <member name="M:CAEX_ClassModel.SystemUnitClassType.Insert_SupportedRoleClass(CAEX_ClassModel.SupportedRoleClassType,System.Boolean)">
