@@ -2121,6 +2121,15 @@
             The name of the "Name" attribute
             </summary>
         </member>
+        <member name="M:CAEX_ClassModel.CAEXBasicObject.CreateUniqueName``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+            <summary>
+               create a unique name for a new element in a collection
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="elements">The elements.</param>
+            <param name="name">    The name.</param>
+            <returns>System.String.</returns>
+        </member>
         <member name="M:CAEX_ClassModel.CAEXBasicObject.getLastHeaderNode">
             <summary>
             This methods returns the last XmlNode of this CAEX basic object according to the element order given by the CAEX schema. In this
@@ -4261,7 +4270,7 @@
         </member>
         <member name="T:CAEX_ClassModel.CAEXDocument">
             <summary>
-            Class CAEXDocument is the CAEX-Wrapper for a CAEX-XmlDocument. The CAEXDocument alway has a <see cref="!:CAEXDocument.CaexFile"/> Property, containing
+            Class CAEXDocument is the CAEX-Wrapper for a CAEX-XmlDocument. The CAEXDocument alway has a <see cref="P:CAEX_ClassModel.CAEXDocument.CAEXFile"/> Property, containing
             the wrapped Root Node of the CAEX-XmlDocument. The CAEXDocument also provides access to CAEX-Element Dictionaries <see cref="P:CAEX_ClassModel.CAEXDocument.Tables"/> which
             can be used for key-based fast access to CAEX-Elements. These Tables are also used for Document Validation.
             </summary>
@@ -12830,12 +12839,34 @@
         <member name="M:CAEX_ClassModel.InternalLinkType.LowestCommonAncestor(CAEX_ClassModel.SystemUnitClassType,CAEX_ClassModel.SystemUnitClassType)">
             <summary>
             gets the Lowest common ancestor of the specified classes. This is a valid element to store an internal link.
+            If no common ancestor is defined, the Class, which has the highest level in the Hierarchy is returned.
             </summary>
             <param name="AClass">a class.</param>
             <param name="BClass">The b class.</param>
             <returns>SystemUnitClassType.</returns>
         </member>
-        <member name="M:CAEX_ClassModel.InternalLinkType.New_InternalLink(CAEX_ClassModel.SystemUnitClassType,CAEX_ClassModel.InterfaceClassType,CAEX_ClassModel.SystemUnitClassType,CAEX_ClassModel.InterfaceClassType,System.String,System.Boolean)">
+        <member name="M:CAEX_ClassModel.InternalLinkType.CreateInternalLink(CAEX_ClassModel.SystemUnitClassType,CAEX_ClassModel.SystemUnitClassType,CAEX_ClassModel.SystemUnitClassType,CAEX_ClassModel.InterfaceFamilyType,CAEX_ClassModel.InterfaceFamilyType,System.String,System.String,System.String)">
+            <summary>
+            Creates  ExternalInterfaces and connects the newly created interfaces with an  internal link. Only the SystemUnitClass-Elements
+            which are parent to the ExternalInterfaces are required as arguments, all others are optional.
+            </summary>
+            <param name="ElementForExternalInterfaceASide">The element (SystemUnitClass or InternalElement) for external interface a side.</param>
+            <param name="ElementForExternalInterfaceBSide">The element (SystemUnitClass or InternalElement) for external interface b side.</param>
+            <param name="linkParent">The link parent  (SystemUnitClass or InternalElement). [optional] </param>
+            <param name="InterfaceClassForExternalInterfaceASide">The interface class for external interface a side. If no class is defined,
+            the externalInterface is created without a class reference.</param>
+            <param name="InterfaceClassForExternalInterfaceBSide">The interface class for external interface b side. If no class is defined,
+            the externalInterface is created without a class reference.</param>
+            <param name="NameForExternalInterfaceASide">The name for external interface a side. If no name is defined,
+            the externalInterface is created with a generated name ("Interface+num").</param>
+            <param name="NameForExternalInterfaceBSide">The name for external interface b side. If no name is defined,
+            the externalInterface is created with a generated name ("Interface+num").</param>
+            <param name="NameForInternalLink">The name for internal link. If no name is defined,
+            the link is created with a generated name ("Link+num").</param>
+            <returns>the InternalLinkType.</returns>
+            <exception cref="T:System.ArgumentNullException">if ElementForExternalInterfaceASide or ElementForExternalInterfaceBSide is null.</exception>
+        </member>
+        <member name="M:CAEX_ClassModel.InternalLinkType.New_InternalLink(CAEX_ClassModel.SystemUnitClassType,CAEX_ClassModel.InterfaceClassType,CAEX_ClassModel.SystemUnitClassType,CAEX_ClassModel.InterfaceClassType,System.String,System.Boolean,CAEX_ClassModel.SystemUnitClassType)">
             <summary>
             Creates a new internal link between the defined Classes and Interfaces if the Classes have a Common Class.
             The InternalLink is added as the first InternalLink if nothing else is explicit defined.
@@ -12846,6 +12877,7 @@
             <param name="BInterface">The b interface.</param>
             <param name="name">The name.</param>
             <param name="asFirst">If <c>true</c>, the link is added as the first link, otherwise as the last</param>
+            <param name="linkParent">The link parent  (SystemUnitClass or InternalElement). [optional] </param>       
             <returns>InternalLinkType.</returns>
         </member>
         <member name="M:CAEX_ClassModel.InternalLinkType.findInternalElement(System.String)">
@@ -15022,6 +15054,12 @@
             The List will also contain the elements own attributes.
             </summary>
             <returns>List&lt;AttributeType&gt;.</returns>
+        </member>
+        <member name="M:CAEX_ClassModel.RoleFamilyType.ExternalInterfaces">
+            <summary>
+            Enumeration Method for direct Children of Type <see cref="T:CAEX_ClassModel.InterfaceClassType"/>
+            </summary>
+            <returns>IEnumerable&lt;InterfaceClassType&gt;.</returns>
         </member>
         <member name="M:CAEX_ClassModel.RoleFamilyType.Insert_Element(Altova.Xml.TypeBase,System.Boolean)">
             <summary>
